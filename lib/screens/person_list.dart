@@ -1,7 +1,10 @@
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:solution_challenge/common/global_variables.dart';
 import 'package:solution_challenge/models/person_details.dart';
 import 'package:solution_challenge/widgets/personal_list_card.dart';
+
+import '../widgets/custom_search_bar.dart';
+
 
 class PersonList extends StatefulWidget {
   const PersonList({Key? key}) : super(key: key);
@@ -11,9 +14,45 @@ class PersonList extends StatefulWidget {
 }
 
 class _PersonListState extends State<PersonList> {
-  int _selectedIndex = 0;
+  int _currentIndex = 0;
 
   List<PersonDetails> DetailsList = [
+    PersonDetails(
+      imageLink:
+          'https://www.shutterstock.com/image-photo/boy-blond-10-years-old-600nw-2044917728.jpg',
+      name: 'Rithik',
+      age: 7,
+      address: 'Sattur Colony, Dharwad',
+      height: 109.2,
+      weight: 28.0,
+    ),
+    PersonDetails(
+      imageLink:
+          'https://www.shutterstock.com/image-photo/boy-blond-10-years-old-600nw-2044917728.jpg',
+      name: 'Rithik',
+      age: 7,
+      address: 'Sattur Colony, Dharwad',
+      height: 109.2,
+      weight: 28.0,
+    ),
+    PersonDetails(
+      imageLink:
+          'https://www.shutterstock.com/image-photo/boy-blond-10-years-old-600nw-2044917728.jpg',
+      name: 'Rithik',
+      age: 7,
+      address: 'Sattur Colony, Dharwad',
+      height: 109.2,
+      weight: 28.0,
+    ),
+    PersonDetails(
+      imageLink:
+          'https://www.shutterstock.com/image-photo/boy-blond-10-years-old-600nw-2044917728.jpg',
+      name: 'Rithik',
+      age: 7,
+      address: 'Sattur Colony, Dharwad',
+      height: 109.2,
+      weight: 28.0,
+    ),
     PersonDetails(
       imageLink:
           'https://www.shutterstock.com/image-photo/boy-blond-10-years-old-600nw-2044917728.jpg',
@@ -33,8 +72,7 @@ class _PersonListState extends State<PersonList> {
       weight: 22.0,
     ),
     PersonDetails(
-      imageLink:
-          'https://static.toiimg.com/photo/99340969.cms',
+      imageLink: 'https://static.toiimg.com/photo/99340969.cms',
       name: 'Anya',
       age: 4,
       address: 'Old Police Colony, Cuttack',
@@ -48,22 +86,32 @@ class _PersonListState extends State<PersonList> {
     return Scaffold(
       backgroundColor: Color(0xffedffe4),
       body: CustomScrollView(
-
         slivers: [
-          SliverAppBar(
+           const SliverAppBar(
             backgroundColor: Color(0xFFEDFFE4),
             expandedHeight: 100.0,
-            // Adjust the height of the SliverAppBar
             floating: false,
             pinned: false,
             centerTitle: false,
-            title: Text(
-              'Person List',
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Inter-VariableFont',
+            title: Padding(
+              padding: EdgeInsets.only(top: 32.0),
+              child: Text(
+                'Person List',
+                style: TextStyle(
+                  fontSize: 32,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Inter-VariableFont',
+                ),
               ),
             ),
+          ),
+          SliverAppBar(
+            collapsedHeight: 60,
+            backgroundColor: Color(0xFFEDFFE4),
+            expandedHeight: 80.0,
+            pinned: true ,
+            title: CustomSearchBar(),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
@@ -75,7 +123,7 @@ class _PersonListState extends State<PersonList> {
                     name: DetailsList[index].name,
                     age: DetailsList[index].age,
                     address: DetailsList[index].address,
-                    height: DetailsList[index].weight,
+                    height: DetailsList[index].height,
                     weight: DetailsList[index].weight
                   ),
                 );
@@ -83,33 +131,11 @@ class _PersonListState extends State<PersonList> {
               childCount: DetailsList.length,
             ),
           ),
+          SliverToBoxAdapter(child:Container(height: 80,),)
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-
-          _selectedIndex = index;
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'form',
-          ),
-        ],
-        selectedItemColor: Colors.orange,
       ),
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      // Add logic to handle tab selection (e.g., navigate to different screens)
-    });
-  }
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solution_challenge/common/global_variables.dart';
 
 class PersonalListCard extends StatelessWidget {
   final String imageLink;
@@ -21,7 +22,8 @@ class PersonalListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
+      color: GlobalVariables.card_color,
+      elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -39,7 +41,7 @@ class PersonalListCard extends StatelessWidget {
                   height: 88,
                   child: Image.network(imageLink),
                 ),
-                Container(width: 20),
+                SizedBox(width: 20,),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +57,7 @@ class PersonalListCard extends StatelessWidget {
                       Text(
                         'Age: $age',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Colors.grey,
                         ),
                       ),
@@ -63,27 +65,33 @@ class PersonalListCard extends StatelessWidget {
                       Text(
                         address,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           color: Colors.grey,
                         ),
                       ),
                       SizedBox(height: 10),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            'Height: ${height.toStringAsFixed(2)} cm',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                          Expanded(
+                            child: Text(
+                              'Height: ${height.toStringAsFixed(1)} cm',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
+                            flex: 1,
                           ),
-                          SizedBox(width: 30),
-                          Text(
-                            'Weight: ${weight.toStringAsFixed(2)} kg',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                          Expanded(
+                            child: Text(
+                              'Weight: ${weight.toStringAsFixed(1)} kg',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
+                            flex: 1,
                           ),
                         ],
                       )

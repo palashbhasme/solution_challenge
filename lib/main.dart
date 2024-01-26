@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:solution_challenge/screens/DataForm.dart';
+import 'package:solution_challenge/feature_form/form_screen/data_form.dart';
+import 'package:solution_challenge/screens/main_navigator.dart';
 import 'package:solution_challenge/screens/person_list.dart';
 
 void main() {
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PersonList(),
+      theme: ThemeData(
+        fontFamily: 'Inter-VariableFont'
+      ),
+      home: MainNavigatorWidget(),
     );
   }
 }
