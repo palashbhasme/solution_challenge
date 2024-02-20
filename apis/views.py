@@ -44,63 +44,56 @@ class DietaryRestrictionsAPIView(APIView):
         user = request.user
         if child_id is None:
             try:
-                profile = Profile.objects.filter(user = user).first()
+                profile = Profile.objects.get(user = user)
+                dietary_restrictions = DietaryRestriction.objects.filter(profile = profile)
             except Profile.DoesNotExist:
                 return Response({"details":"Profile doesn't exist"}, status= status.HTTP_404_NOT_FOUND)
-            
-            dietary_restrictions = DietaryRestriction.objects.filter(profile = profile)
 
         else:
+            try:
+                child_profile = ChildProfile.objects.get(id = child_id)
+                dietary_restrictions = DietaryRestriction.objects.filter(childprofile=child_profile)
 
-            child_profile = ChildProfile.objects.filter(id = child_id ,profile__user = user).first()
-            if child_profile:
-                dietary_restrictions = DietaryRestriction.objects.filter(child_profile = child_profile)
-            else:
-                return Response({"details": "Child not found"}, status= status.HTTP_404_NOT_FOUND)
-            
+            except ChildProfile.DoesNotExist:
+                return Response({"details": "Child not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = DietaryRestrictionSerializer(dietary_restrictions, many = True)
 
-        return Response(serializer.data, status= status.HTTP_200_OK)
+        return Response({"dietaryrestrictions":serializer.data}, status= status.HTTP_200_OK)
     
         
     def post(self, request):
 
         user = request.user
-        child_profile = None
-        try:
-            profile = Profile.objects.filter(user = user).first()
-
-        except Profile.DoesNotExist:
-            return Response({"details":"Profile doesn't exist"}, status= status.HTTP_404_NOT_FOUND)
-        
+        childprofile = None
 
         if "profile_id" in request.data:
-            
-            serializer = DietaryRestrictionSerializer(data = request.data)
+            profile_id = request.data["profile_id"]
+            try:
+                profile = Profile.objects.filter(id = profile_id).first()
 
-            if serializer.is_valid():
+            except Profile.DoesNotExist:
 
-                serializer.save(profile = user)
-                return Response(serializer.data, status= status.HTTP_201_CREATED)
-            
-            else:
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"details":"Profile doesn't exist"}, status= status.HTTP_404_NOT_FOUND)
+        else:
+            profile = None
         
         if "child_id" in request.data:
+            child_id = request.data["child_id"]
+            childprofile = ChildProfile.objects.filter(id=child_id).first()
 
-            child_profile = ChildProfile.objects.filter(id = request.data["child_id"] ,profile__user = user).first()
-
-            if not child_profile:
+            if not childprofile:
                 return Response({"details": "Child not found"}, status= status.HTTP_404_NOT_FOUND)
 
         serializer = DietaryRestrictionSerializer(data = request.data)
 
         if serializer.is_valid():
-            if child_profile:
+            if childprofile:
 
-                serializer.save(child_profile = child_profile)
-            else:
+                serializer.save(childprofile = childprofile)
+            elif profile:
                 serializer.save(profile = profile)
+            else:
+                return Response({"details": "Profile or child_id is required"}, status=status.HTTP_400_BAD_REQUEST)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         
         else:
@@ -111,11 +104,10 @@ class MedicalRecordAPIView(APIView):
 
     def post(self, request):
         serializer = MedicalRecordSerializer(data= request.data)
-
         if serializer.is_valid():
-            age = request.data["age"]
-            height = request.data["height"]
-            weight = request.data["weight"]
+            age = int(request.data["age"])
+            height = int(request.data["height"])
+            weight = int(request.data["weight"])
             health_status = nutritional_status(age,weight, height)
             if "profile_id" in request.data:
                 profile = Profile.objects.get(pk = request.data['profile_id'])
@@ -128,7 +120,7 @@ class MedicalRecordAPIView(APIView):
             
             return Response(serializer.data ,  status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-    
+
     def get(self, request, record_id):
         try:
             queryset = MedicalRecord.objects.get(pk = record_id)
@@ -141,15 +133,15 @@ class MedicalRecordAPIView(APIView):
 class MedicalRecordListAPIView(APIView):
 
     def get(self, request, profile_type, id):
-
+        user = request.user
         if profile_type == "self":
             try:
-                profile = Profile.objects.get(pk = id)
+                profile = Profile.objects.get(pk = id, user = user)
             except Profile.DoesNotExist:
                 return Response({"details":"Data not Found"}, status= status.HTTP_404_NOT_FOUND)
             
             try:
-                queryset = MedicalRecord.objects.all(profile = profile)
+                queryset = MedicalRecord.objects.filter(profile = profile)
             except MedicalRecord.DoesNotExist:
                 return Response({"details":"Data not Found"}, status= status.HTTP_404_NOT_FOUND)
             
@@ -157,14 +149,14 @@ class MedicalRecordListAPIView(APIView):
             return Response(serializer.data, status= status.HTTP_200_OK)
         
         elif profile_type == "child":
-
+            
             try:
                 childprofile = ChildProfile.objects.get(pk = id)
             except Profile.DoesNotExist:
                 return Response({"details":"Data not Found"}, status= status.HTTP_404_NOT_FOUND)
             
             try:
-                queryset = MedicalRecord.objects.all(childprofile = childprofile)
+                queryset = MedicalRecord.objects.filter(childprofile = childprofile)
             except MedicalRecord.DoesNotExist:
                 return Response({"details":"Data not Found"}, status= status.HTTP_404_NOT_FOUND)
             
@@ -172,5 +164,64 @@ class MedicalRecordListAPIView(APIView):
             return Response(serializer.data, status= status.HTTP_200_OK)
         else:
             return Response({"details":"Invalid request"}, status= status.HTTP_400_BAD_REQUEST)
-        
 
+class MedicationAPIView(APIView):
+
+    def get(self, request, child_id = None):
+        user = request.user
+        if child_id is None:
+            try:
+                profile = Profile.objects.get(user = user)
+                medication = Medication.objects.filter(profile = profile)
+            except Profile.DoesNotExist:
+                return Response({"details":"Profile doesn't exist"}, status= status.HTTP_404_NOT_FOUND)
+
+        else:
+            try:
+                child_profile = ChildProfile.objects.get(id = child_id)
+                medication = Medication.objects.filter(childprofile=child_profile)
+
+            except ChildProfile.DoesNotExist:
+                return Response({"details": "Child not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = MedicationSerializer(medication, many = True)
+
+        return Response({"medication":serializer.data}, status= status.HTTP_200_OK)
+    
+        
+    def post(self, request):
+
+        user = request.user
+        childprofile = None
+
+        if "profile_id" in request.data:
+            profile_id = request.data["profile_id"]
+            try:
+                profile = Profile.objects.filter(id = profile_id).first()
+
+            except Profile.DoesNotExist:
+
+                return Response({"details":"Profile doesn't exist"}, status= status.HTTP_404_NOT_FOUND)
+        else:
+            profile = None
+        
+        if "child_id" in request.data:
+            child_id = request.data["child_id"]
+            childprofile = ChildProfile.objects.filter(id=child_id).first()
+
+            if not childprofile:
+                return Response({"details": "Child not found"}, status= status.HTTP_404_NOT_FOUND)
+
+        serializer = MedicationSerializer(data = request.data)
+
+        if serializer.is_valid():
+            if childprofile:
+
+                serializer.save(childprofile = childprofile)
+            elif profile:
+                serializer.save(profile = profile)
+            else:
+                return Response({"details": "Profile or child_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
+        
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

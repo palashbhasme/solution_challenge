@@ -16,7 +16,7 @@ class Profile(models.Model):
 
     name = models.CharField(max_length = 40)
     user = models.OneToOneField(User,on_delete = models.CASCADE)
-    #picture = models.ImageField()
+    picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     dob = models.DateField()
     email = models.CharField(max_length = 20)
     phone = models.CharField(max_length = 15)
@@ -38,7 +38,7 @@ class ChildProfile(models.Model):
     profile = models.ForeignKey(Profile, on_delete = models.CASCADE)
 
     name =  models.CharField(max_length = 40)
-    #picture = models.ImageField()
+    picture = models.ImageField(upload_to='childprofile_pics/', blank=True, null=True)
     gender = models.CharField(max_length = 1, choices = GENDER_CHOICES)
     dob = models.DateField()
     height = models.DecimalField(max_digits=5, decimal_places=2)
@@ -54,6 +54,7 @@ class ChildProfile(models.Model):
 class DietaryRestriction(models.Model):
     name = models.CharField(max_length = 20)
     description = models.TextField()
+
     profile = models.ForeignKey(Profile, blank = True, null = True, on_delete = models.CASCADE)
     childprofile = models.ForeignKey(ChildProfile, blank = True, null = True, on_delete = models.CASCADE)
 
@@ -68,11 +69,11 @@ class MedicalRecord(models.Model):
     age = models.IntegerField()
     height = models.DecimalField(max_digits=5, decimal_places=2)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
-    health_status = models.CharField(max_length = 20)
+    health_status = models.CharField(max_length = 20, blank = True)
     date = models.DateField(default=date.today)
 
     def __str__(self) -> str:
-        return str(self.childprofile.name) + str(self.date)
+        return "medicalof_"+ str(self.date)
     
 
 class Medication(models.Model):

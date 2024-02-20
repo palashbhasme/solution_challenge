@@ -8,28 +8,27 @@ class ChildProfileSerializer(serializers.ModelSerializer):
         model = ChildProfile
         fields = "__all__"
         
-class ProfileSerializer(serializers.Serializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = "__all__"
 
-class MedicalRecordSerializer(serializers.Serializer):
+class MedicalRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalRecord
         fields = "__all__"
 
-class MedicationSerializer(serializers.Serializer):
+class MedicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medication
         fields = "__all__"
 
-class MedicationLogSerializer(serializers.Serializer):
+class MedicationLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicationLog
         fields = "__all__"
 
-class DietaryRestrictionSerializer(serializers.Serializer):
-
+class DietaryRestrictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DietaryRestriction
         fields = "__all__"
