@@ -14,7 +14,7 @@ class SubmitButton extends StatelessWidget {
       width: 20,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white, width: 0.0),
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(24),
         color: GlobalVariables.selected_app_bar_color,
       ),
       child: OutlinedButton(

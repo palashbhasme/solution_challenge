@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:solution_challenge/common/utils.dart';
-import 'package:solution_challenge/feature_form/widgets/submit_button.dart';
-import '../widgets/custom_text_field.dart';
+import 'package:solution_challenge/form/form_widgets/custom_picker.dart';
+import 'package:solution_challenge/form/form_widgets/submit_button.dart';
+import '../form_widgets/custom_dropdown.dart';
+import '../../widgets/custom_text_field.dart';
 
 class DataForm extends StatefulWidget {
   DataForm({super.key});
@@ -17,14 +19,12 @@ class _DataFormState extends State<DataForm> {
   XFile? _displayImage;
 
   final _healthFormKey = GlobalKey<FormState>();
-
+  String? _selectedValue1;
   final TextEditingController childNameController = TextEditingController();
   final TextEditingController dateOfBirthController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
   final TextEditingController bloodTypeController = TextEditingController();
-  final TextEditingController guardianNameController = TextEditingController();
-  final TextEditingController relationshipController = TextEditingController();
-  final TextEditingController contactController = TextEditingController();
+  final TextEditingController allergiesController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
@@ -96,10 +96,13 @@ class _DataFormState extends State<DataForm> {
                     padding: EdgeInsets.fromLTRB(0, 8, 0, 8.0),
                     child: Text(
                       'Personal Info',
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),                  Padding(
+                  ),
+                  Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Row(
                       children: [
@@ -107,17 +110,14 @@ class _DataFormState extends State<DataForm> {
                           flex: 1,
                           child: Text(
                             'DOB',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: CustomTextField(
-                            hintText: 'DOB',
-                            controller: dateOfBirthController,
-                            showHint: false,
-                          ),
-                        ),
+                        Expanded(flex: 3, child: CustomPicker()),
                       ],
                     ),
                   ),
@@ -129,58 +129,76 @@ class _DataFormState extends State<DataForm> {
                           flex: 1,
                           child: Text(
                             "Gender",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                         Expanded(
                           flex: 3,
-                          child: CustomTextField(
-                            controller: genderController,
-                            showHint: false,
-                            hintText: 'Gender',
+                          child: CustomDropdown<String>(
+                            selectedValue: _selectedValue1,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedValue1 = newValue;
+                              });
+                            },
+                            dropdownItems: <DropdownMenuItem<String>>[
+                              DropdownMenuItem(
+                                  value: "Option 1", child: Text("Option 1")),
+                              DropdownMenuItem(
+                                  value: "Option 2", child: Text("Option 2")),
+                              // Add more options as needed
+                            ],
+                            hintText: 'Select Gender',
                           ),
                         ),
                       ],
                     ),
                   ),
 
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8.0),
-                    child: Text(
-                      'Guardian Info',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 14.0),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 1,
+                          child: Text(
+                            "Blood Type",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: CustomDropdown<String>(
+                            selectedValue: _selectedValue1,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedValue1 = newValue;
+                              });
+                            },
+                            dropdownItems: <DropdownMenuItem<String>>[
+                              DropdownMenuItem(
+                                  value: "Option 1", child: Text("Option 1")),
+                              DropdownMenuItem(
+                                  value: "Option 2", child: Text("Option 2")),
+                              // Add more options as needed
+                            ],
+                            hintText: 'Select a Blood Type',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+
                   Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: CustomTextField(
-                          controller: guardianNameController,
-                          hintText: 'Guardian Name',
-                          showHint: true,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: CustomTextField(
-                          controller: relationshipController,
-                          hintText: 'Relationship',
-                          showHint: true,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: CustomTextField(
-                          controller: contactController,
-                          hintText: 'Contact',
-                          showHint: true,
-                        ),
-                      ),
-
-                      // Health Info Section
-
                       Padding(
                         padding: const EdgeInsets.only(bottom: 14.0),
                         child: CustomTextField(
@@ -247,8 +265,19 @@ class _DataFormState extends State<DataForm> {
                       ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CustomTextField(
+                      controller: allergiesController,
+                      hintText: 'Allergies(if any)',
+                      showHint: true,
+                    ),
+                  ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Container(
               child: SubmitButton(
@@ -257,8 +286,8 @@ class _DataFormState extends State<DataForm> {
                   if (_healthFormKey.currentState!.validate()) {}
                 },
               ),
-              width: 400,
-              height: 50,
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: MediaQuery.of(context).size.height * 0.06,
             ),
             Container(
               height: 100,
