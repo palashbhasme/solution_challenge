@@ -1,12 +1,65 @@
+from django.contrib.auth import authenticate, login
 from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import *
 from .serializers import *
 from .utils import *
 
 # Create your views here.
+
+#Authentication Views
+class RegisterUserView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+            user_serializer = UserSerializer(data=request.data)
+            if user_serializer.is_valid():
+                user = user_serializer.save()
+
+                # Create profile data
+                profile_data = {
+                    'user': user.id,
+                    'name': request.data.get('name'),
+                    'dob': request.data.get('dob'),
+                    'email': request.data.get('email'),
+                    'phone': request.data.get('phone'),
+                    'gender': request.data.get('gender'),
+                    'is_volunteer': request.data.get('is_volunteer', False),
+                }
+
+                # Serialize profile data
+                profile_serializer = ProfileSerializer(data=profile_data)
+                if profile_serializer.is_valid():
+                    profile_serializer.save()
+
+                    # Create a token for the user
+                    refresh = RefreshToken.for_user(user)
+                    access_token = str(refresh.access_token)
+
+                    return Response({'message': 'Registration successful and user logged in', 'access_token': access_token}, status=status.HTTP_201_CREATED)
+
+                else:
+                    # Delete the user if profile creation fails
+                    user.delete()
+                    return Response({'error': 'Error creating profile'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'error': 'Registration failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, format=None):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class ChildListAPIView(APIView):
 
@@ -32,9 +85,11 @@ class ChildDetailAPIView(APIView):
         return Response(serializer.data, status= status.HTTP_200_OK)
     
     def post(self, request):
+        user = request.user
+        profile = Profile.objects.get(user = user)
         serializer = ChildProfileSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(profile = profile)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
