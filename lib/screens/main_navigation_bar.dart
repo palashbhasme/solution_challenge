@@ -4,16 +4,17 @@ import 'package:solution_challenge/screens/home_screen.dart';
 import 'package:solution_challenge/screens/person_list.dart';
 import 'package:solution_challenge/common/global_variables.dart';
 
-import '../feature_form/form_screen/data_form.dart';
+import '../form/form_screen/data_form.dart';
 
-class MainNavigatorWidget extends StatefulWidget {
-  const MainNavigatorWidget({super.key});
+class MainNavigationBar extends StatefulWidget {
+  const MainNavigationBar({super.key});
+  static const String routeName = '/main_navigation_bar';
 
   @override
-  State<MainNavigatorWidget> createState() => _MainNavigatorWidgetState();
+  State<MainNavigationBar> createState() => _MainNavigationBarState();
 }
 
-class _MainNavigatorWidgetState extends State<MainNavigatorWidget> {
+class _MainNavigationBarState extends State<MainNavigationBar> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     DataForm(),
@@ -24,6 +25,7 @@ class _MainNavigatorWidgetState extends State<MainNavigatorWidget> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         extendBody: true,
         body: _screens[_currentIndex],
         bottomNavigationBar:  Padding(

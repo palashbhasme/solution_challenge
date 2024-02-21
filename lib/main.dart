@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:solution_challenge/feature_form/form_screen/data_form.dart';
-import 'package:solution_challenge/screens/main_navigator.dart';
-import 'package:solution_challenge/screens/person_list.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solution_challenge/routes.dart';
+import 'package:solution_challenge/screens/chat_bot.dart';
+import 'package:solution_challenge/screens/home_screen.dart';
+import 'package:solution_challenge/screens/login_screen.dart';
+import 'package:solution_challenge/screens/main_navigation_bar.dart';
 
-void main() {
+
+void main() async{
+  await dotenv.load(fileName: ".env");
   runApp(
-    const MyApp(),
+     MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+   MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Inter-VariableFont'
       ),
-      home: MainNavigatorWidget(),
+      onGenerateRoute: (settings) => generateRoute(settings),
+      home: HomeScreen(),
     );
   }
 }

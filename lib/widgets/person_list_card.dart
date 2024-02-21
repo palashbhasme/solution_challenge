@@ -4,7 +4,7 @@ import 'package:solution_challenge/common/global_variables.dart';
 class PersonalListCard extends StatelessWidget {
   final String imageLink;
   final String name;
-  final int age;
+  final String age;
   final String address;
   final double height;
   final double weight;
@@ -39,9 +39,14 @@ class PersonalListCard extends StatelessWidget {
                 Container(
                   width: 75,
                   height: 88,
-                  child: Image.network(imageLink),
+                  child: Image.network(
+                    imageLink,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
