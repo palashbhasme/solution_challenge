@@ -5,6 +5,9 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 from .views import *
 
 urlpatterns = [
+    #Home Page
+    path("home/", HomePageAPIView.as_view()),
+
     path("child/list/", ChildListAPIView.as_view()), # To GET a list of all the children
     path("child/detail/<int:id>/", ChildDetailAPIView.as_view()), # To GET details of a child
     path("child/detail/", ChildDetailAPIView.as_view()), # To GET details of a child
@@ -25,4 +28,5 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token-verify/', TokenVerifyView.as_view(), name='token_verify'),
+    
 ]

@@ -61,6 +61,32 @@ class LoginView(APIView):
             return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
+class HomePageAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,  request):
+        user = request.user
+        try:
+            profile = Profile.objects.get(user = user)
+        except Profile.DoesNotExist:
+            return Response({"details":"Profile Doesn't exist"}, status= status.HTTP_404_NOT_FOUND)
+        profileserializer = ProfileSerializer(profile).data
+        childprofile = ChildProfile.objects.filter(profile = profile)
+        if childprofile:
+            serializer = HomePageSerializer(childprofile, many = True)
+            response = {
+                "profile_id": profileserializer["id"],
+                "profile_name": profileserializer["name"],
+                "profile_picture": profileserializer["picture"],
+                "childs": serializer.data
+            }
+        else:
+            response = {
+                "profile_id": profileserializer["id"],
+                "profile_name": profileserializer["name"],
+                "profile_picture": profileserializer["picture"],
+            }
+        return Response(response, status= status.HTTP_200_OK)
+
 class ChildListAPIView(APIView):
 
     def get(self, request, format = None):
@@ -94,6 +120,7 @@ class ChildDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class DietaryRestrictionsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, child_id = None):
         user = request.user
@@ -156,6 +183,7 @@ class DietaryRestrictionsAPIView(APIView):
                 
         
 class MedicalRecordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = MedicalRecordSerializer(data= request.data)
@@ -186,6 +214,7 @@ class MedicalRecordAPIView(APIView):
         return Response(serializer.data, status= status.HTTP_200_OK)
 
 class MedicalRecordListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, profile_type, id):
         user = request.user
@@ -221,6 +250,7 @@ class MedicalRecordListAPIView(APIView):
             return Response({"details":"Invalid request"}, status= status.HTTP_400_BAD_REQUEST)
 
 class MedicationAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, child_id = None):
         user = request.user
