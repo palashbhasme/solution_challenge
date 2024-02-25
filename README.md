@@ -1,21 +1,29 @@
-# solution_challenge
-
-This is the readme for Google Solution Challenge 2024 for Nutritrack application. This app uses Gemini and Google Maps platform to provide maps and AI chatbot Nutri.AI feature.
+# Nutritrack - Google Solution Challenge 2024
+This README provides an overview of Nutritrack, an application developed for the Google Solution Challenge 2024. Nutritrack utilizes Gemini and the Google Maps platform to offer map functionality and an AI chatbot feature called Nutri.AI.
 
 ## Getting Started
-To run the code simply run main.dart file and which starts the log in screen of the application.
-You can either register or use these credentials:
-user name: palash69
-password: palash1234
-In case there are problems registering user he above credentials.
+To run the application, follow these steps:
 
-## Home Screen
-Home Screen has for options:
-1) You can engage with Nutri.AI chatbot which levrages Google's Gemini to answer user's queries
-2) Map feature enables user to view nearby health center and NGO's
-3) Track Health enables users to track their children's health parameters like heightm weight and allergies.
+Clone the repository to your local machine.
+Navigate to the project directory.
+Run main.dart to start the application.
+Upon launching, you will be directed to the login screen.
+If you encounter any issues during registration, you can use the following credentials:
+
+Username: palash69
+Password: palash1234
+
+## Features
+1. Nutri.AI Chatbot
+Engage with Nutri.AI, an AI-powered chatbot built using Google's Gemini technology. Nutri.AI provides answers to user queries related to nutrition, diet, and health.
+
+2. Map Feature
+Explore nearby health centers and NGOs using the integrated Google Maps feature. This functionality helps users locate essential health services and resources conveniently.
+
+3. Health Tracking
+Track your children's health parameters, including height, weight, and allergies, using the Health Tracking feature. This feature enables parents to monitor their children's health status effectively.
 
 
-   
-
+# Acknowledgement
+We would like to thank Google for organizing the Solution Challenge 2024 and providing the opportunity to develop Nutritrack.
 
