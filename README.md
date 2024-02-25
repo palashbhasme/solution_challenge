@@ -1,16 +1,21 @@
 # solution_challenge
 
-A new Flutter project.
+This is the readme for Google Solution Challenge 2024 for Nutritrack application. This app uses Gemini and Google Maps platform to provide maps and AI chatbot Nutri.AI feature.
 
 ## Getting Started
+To run the code simply run main.dart file and which starts the log in screen of the application.
+You can either register or use these credentials:
+user name: palash69
+password: palash1234
+In case there are problems registering user he above credentials.
 
-This project is a starting point for a Flutter application.
+## Home Screen
+Home Screen has for options:
+1) You can engage with Nutri.AI chatbot which levrages Google's Gemini to answer user's queries
+2) Map feature enables user to view nearby health center and NGO's
+3) Track Health enables users to track their children's health parameters like heightm weight and allergies.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+   
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
