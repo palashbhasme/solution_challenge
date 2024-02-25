@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solution_challenge/common/global_variables.dart';
 import 'package:solution_challenge/screens/chat_bot.dart';
+import 'package:solution_challenge/screens/main_navigation_bar.dart';
 import 'package:solution_challenge/screens/map_screen.dart';
 import 'package:solution_challenge/widgets/custom_rectangular_card.dart';
 import 'package:solution_challenge/widgets/custom_square_card.dart';
@@ -94,9 +94,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: CustomSquareCard(
-                          image: 'assets/images/track_health.png',
-                          text: 'Track Health',
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, MainNavigationBar.routeName, (route) => false);
+                          },
+                          child: CustomSquareCard(
+
+                            image: 'assets/images/track_health.png',
+                            text: 'Track Health',
+                          ),
                         ),
                       ),
                       Padding(

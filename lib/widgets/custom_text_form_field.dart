@@ -40,15 +40,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.obscureText
               ? IconButton(
-            onPressed: () {
-              setState(() {
-                isVisible = !isVisible;
-              });
-            },
-            icon: isVisible
-                ? Icon(Icons.visibility_off)
-                : Icon(Icons.visibility),
-          )
+                  onPressed: () {
+                    setState(() {
+                      isVisible = !isVisible;
+                    });
+                  },
+                  icon: isVisible
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility),
+                )
               : null,
           labelText: widget.labelText,
           border: OutlineInputBorder(

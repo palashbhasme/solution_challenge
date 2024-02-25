@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-class PersonDetails {
+class ChildModel {
   final String image;
   final String name;
   final String address;
@@ -15,7 +15,7 @@ class PersonDetails {
   final String allergies;
 
 
-  PersonDetails({
+  ChildModel({
     required this.name,
     required this.address,
     required this.height,
@@ -43,8 +43,8 @@ class PersonDetails {
     };
   }
 
-  factory PersonDetails.fromMap(Map<String, dynamic> json) {
-    return PersonDetails(
+  factory ChildModel.fromMap(Map<String, dynamic> json) {
+    return ChildModel(
       name: json['name']?? '',
       image: json['picture']??'',
       gender:  json['gender']??'',
@@ -60,6 +60,6 @@ class PersonDetails {
     );
   }
   String toJson() => jsonEncode(toMap());
-  factory PersonDetails.fromJson(String source) => PersonDetails.fromMap(json.decode(source));
+  factory ChildModel.fromJson(String source) => ChildModel.fromMap(json.decode(source));
 //
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:solution_challenge/screens/home_screen.dart';
 import '../services/location_service.dart';
+import 'home_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -52,8 +52,8 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
-          },
+            Navigator.pushNamedAndRemoveUntil(
+                context, HomeScreen.routeName, (route) => false);          },
         ),
         backgroundColor: Colors.transparent, // Transparent AppBar
         elevation: 0, // Remove shadow

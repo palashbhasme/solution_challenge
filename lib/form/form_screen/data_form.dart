@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solution_challenge/common/utils.dart';
 import 'package:solution_challenge/form/form_widgets/custom_picker.dart';
 import 'package:solution_challenge/form/form_widgets/submit_button.dart';
+import '../../screens/home_screen.dart';
 import '../form_widgets/custom_dropdown.dart';
 import '../../widgets/custom_text_field.dart';
 
@@ -19,7 +20,8 @@ class _DataFormState extends State<DataForm> {
   XFile? _displayImage;
 
   final _healthFormKey = GlobalKey<FormState>();
-  String? _selectedValue1;
+  String? _selectedBloodType;
+  String? _selectedGender;
   final TextEditingController childNameController = TextEditingController();
   final TextEditingController dateOfBirthController = TextEditingController();
   final TextEditingController genderController = TextEditingController();
@@ -29,16 +31,74 @@ class _DataFormState extends State<DataForm> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
 
+  List<DropdownMenuItem<String>> genders = [
+    DropdownMenuItem(
+      value: 'M',
+      child: Text('Male'),
+    ),
+    DropdownMenuItem(
+      value: 'F',
+      child: Text('Female'),
+    ),
+    DropdownMenuItem(
+      value: 'O',
+      child: Text('Other'),
+    ),
+  ];
+
   void selectImage() async {
     var res = await pickImage();
     setState(() {
       _displayImage = res;
     });
   }
+  List<DropdownMenuItem<String>> bloodTypes = [
+    DropdownMenuItem(
+      value: 'A+',
+      child: Text('A+'),
+    ),
+    DropdownMenuItem(
+      value: 'A-',
+      child: Text('A-'),
+    ),
+    DropdownMenuItem(
+      value: 'B+',
+      child: Text('B+'),
+    ),
+    DropdownMenuItem(
+      value: 'B-',
+      child: Text('B-'),
+    ),
+    DropdownMenuItem(
+      value: 'AB+',
+      child: Text('AB+'),
+    ),
+    DropdownMenuItem(
+      value: 'AB-',
+      child: Text('AB-'),
+    ),
+    DropdownMenuItem(
+      value: 'O+',
+      child: Text('O+'),
+    ),
+    DropdownMenuItem(
+      value: 'O-',
+      child: Text('O-'),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar:AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(
+                context, HomeScreen.routeName, (route) => false);          },
+        ),
+        backgroundColor: Colors.transparent, // Transparent AppBar
+        elevation: 0, // Remove shadow
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(12.0, 12.0, 8.0, 8.0),
         physics: BouncingScrollPhysics(),
@@ -46,31 +106,34 @@ class _DataFormState extends State<DataForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.08,
             ),
             GestureDetector(
               child: _displayImage == null
                   ? Container(
-                      width: 180,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2.0),
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      child: Image(
-                        fit: BoxFit.contain,
-                        image: AssetImage(
-                          'assets/images/profile_icon.jpg',
-                        ),
-                      ),
-                    )
+                width: 180,
+                height: 180,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2.0),
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Image(
+                  fit: BoxFit.contain,
+                  image: AssetImage(
+                    'assets/images/profile_icon.jpg',
+                  ),
+                ),
+              )
                   : Image.file(
-                      File(
-                        _displayImage!.path,
-                      ),
-                      height: 180,
-                      width: 180,
-                    ),
+                File(
+                  _displayImage!.path,
+                ),
+                height: 180,
+                width: 180,
+              ),
               onTap: () {
                 selectImage();
               },
@@ -139,19 +202,13 @@ class _DataFormState extends State<DataForm> {
                         Expanded(
                           flex: 3,
                           child: CustomDropdown<String>(
-                            selectedValue: _selectedValue1,
+                            selectedValue: _selectedGender,
                             onChanged: (newValue) {
                               setState(() {
-                                _selectedValue1 = newValue;
+                                _selectedGender = newValue;
                               });
                             },
-                            dropdownItems: <DropdownMenuItem<String>>[
-                              DropdownMenuItem(
-                                  value: "Option 1", child: Text("Option 1")),
-                              DropdownMenuItem(
-                                  value: "Option 2", child: Text("Option 2")),
-                              // Add more options as needed
-                            ],
+                            dropdownItems: genders,
                             hintText: 'Select Gender',
                           ),
                         ),
@@ -177,19 +234,13 @@ class _DataFormState extends State<DataForm> {
                         Expanded(
                           flex: 3,
                           child: CustomDropdown<String>(
-                            selectedValue: _selectedValue1,
+                            selectedValue: _selectedBloodType,
                             onChanged: (newValue) {
                               setState(() {
-                                _selectedValue1 = newValue;
+                                _selectedBloodType = newValue;
                               });
                             },
-                            dropdownItems: <DropdownMenuItem<String>>[
-                              DropdownMenuItem(
-                                  value: "Option 1", child: Text("Option 1")),
-                              DropdownMenuItem(
-                                  value: "Option 2", child: Text("Option 2")),
-                              // Add more options as needed
-                            ],
+                            dropdownItems: bloodTypes,
                             hintText: 'Select a Blood Type',
                           ),
                         ),
@@ -217,7 +268,7 @@ class _DataFormState extends State<DataForm> {
                     child: Text(
                       'Health Info',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
 
@@ -286,8 +337,14 @@ class _DataFormState extends State<DataForm> {
                   if (_healthFormKey.currentState!.validate()) {}
                 },
               ),
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.7,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.06,
             ),
             Container(
               height: 100,

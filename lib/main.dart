@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solution_challenge/form/form_screen/data_form.dart';
 import 'package:solution_challenge/routes.dart';
 import 'package:solution_challenge/screens/chat_bot.dart';
 import 'package:solution_challenge/screens/home_screen.dart';
-import 'package:solution_challenge/screens/login_screen.dart';
+import 'package:solution_challenge/auth/login_screen.dart';
 import 'package:solution_challenge/screens/main_navigation_bar.dart';
+import 'package:solution_challenge/auth/register_screen.dart';
 
 
 void main() async{
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Inter-VariableFont'
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

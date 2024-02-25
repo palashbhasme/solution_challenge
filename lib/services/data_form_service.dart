@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:solution_challenge/models/person_details.dart';
+import 'package:solution_challenge/models/child_model.dart';
 
 class data_form_service {
   void addPerson({
@@ -16,7 +16,7 @@ class data_form_service {
     required image,
   }) {
     try {
-      PersonDetails(
+      ChildModel(
           name: childName,
           address: address,
           height: height,

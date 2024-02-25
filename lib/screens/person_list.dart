@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solution_challenge/common/global_variables.dart';
-import 'package:solution_challenge/models/person_details.dart';
+import 'package:solution_challenge/models/child_model.dart';
 import 'package:solution_challenge/widgets/person_list_card.dart';
 
 import '../widgets/custom_search_bar.dart';
@@ -15,8 +15,8 @@ class PersonList extends StatefulWidget {
 class _PersonListState extends State<PersonList> {
   int _currentIndex = 0;
 
-  List<PersonDetails> DetailsList = [
-    PersonDetails(
+  List<ChildModel> DetailsList = [
+    ChildModel(
       image:
           'https://www.shutterstock.com/image-photo/boy-blond-10-years-old-600nw-2044917728.jpg',
       name: 'Rithik',
@@ -29,7 +29,7 @@ class _PersonListState extends State<PersonList> {
       dob: "7",
       allergies: 'none'
     ),
-    PersonDetails(
+    ChildModel(
       image:
           'https://t4.ftcdn.net/jpg/01/25/81/99/360_F_125819936_tApB7Z7bviuNjyXbpT0x1UOkOPUHIEh1.jpg',
       name: 'Roshan',
@@ -43,7 +43,7 @@ class _PersonListState extends State<PersonList> {
         allergies: 'none'
 
     ),
-    PersonDetails(
+    ChildModel(
       image: 'https://static.toiimg.com/photo/99340969.cms',
       name: 'Anya',
       address: 'Old Police Colony, Cuttack',

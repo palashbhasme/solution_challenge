@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solution_challenge/widgets/dob_picker.dart';
+
+import 'package:solution_challenge/widgets/register_drop_down.dart';
 import '../common/global_variables.dart';
 import '../widgets/custom_text_form_field.dart';
+import 'auth_service.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,11 +16,12 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  String? firstName;
-  String? email;
-  String? password;
-
+  AuthServices authServices = AuthServices();
+  late String firstName;
+  late String email;
+  late String password;
+  late String phoneNumber;
+  late String userName;
   @override
   void initState() {}
 
@@ -41,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: screenHeight * 0.1,
+                height: screenHeight * 0.08,
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0),
@@ -66,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               SizedBox(
-                height: screenHeight * 0.15,
+                height: screenHeight * 0.08,
               ),
               Form(
                 key: _formKey,
@@ -74,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     CustomTextFormField(
                       labelText: 'First name',
-                      obscureText: false,
+                      obscureText: false, 
                       prefixIcon: const Icon(Icons.person),
                       onSaved: (val) {
                         setState(() {
@@ -92,6 +96,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 15,
                     ),
                     CustomTextFormField(
+                      labelText: 'User name',
+                      obscureText: false,
+                      prefixIcon: const Icon(Icons.person),
+                      onSaved: (val) {
+                        setState(() {
+                          userName = val;
+                        });
+                      },
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return 'Please enter your user name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    CustomTextFormField(
+                      labelText: 'Phone Number',
+                      obscureText: false,
+                      prefixIcon: const Icon(Icons.phone),
+                      onSaved: (val) {
+                        setState(() {
+                          phoneNumber = val;
+                        });
+                      },
+                      validator: (val) {
+                        if (val.isEmpty || val.length < 8) {
+                          return 'The password should contain 8 or more characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    CustomTextFormField(
                       labelText: 'Email',
                       obscureText: false,
                       prefixIcon: const Icon(Icons.email),
@@ -101,9 +143,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
                       },
                       validator: (val) {
-                        // if (!EmailValidator.validate(val)) {
-                        //   return 'Please enter a valid email';
-                        // }
                         return null;
                       },
                     ),
@@ -126,6 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       },
                     ),
+                    const SizedBox(
+                      height: 15,
+                    ),
                   ],
                 ),
               ),
@@ -142,22 +184,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20))),
                   onPressed: () async {
-                    // if (_formKey.currentState!.validate()) {
-                    //   _formKey.currentState!.save();
-                    //   final username = await AuthServices.signUp(
-                    //       firstName!, email!, password!);
-                    //   if (username != null) {
-                    //     Navigator.pushReplacement(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) => HomeScreen(
-                    //           // username: username,
-                    //           // prefs: widget.prefs,
-                    //         ),
-                    //       ),
-                    //     );
-                    //   }
-                    // }
+                    if(_formKey.currentState!.validate()){
+                      _formKey.currentState!.save();
+  
+                    authServices.registerUser(
+                      phone: phoneNumber,
+                      context: context,
+                      firstName: firstName,
+                      email: email,
+                      userName:  userName,
+                      password: password,
+
+                    );
+                    }
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(16.0),

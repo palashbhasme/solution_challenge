@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:solution_challenge/auth/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solution_challenge/common/global_variables.dart';
-import 'package:solution_challenge/screens/register_screen.dart';
+import 'package:solution_challenge/auth/register_screen.dart';
 
+import '../screens/home_screen.dart';
 import '../widgets/custom_text_form_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,8 +16,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  String? email;
+  AuthServices authServices = AuthServices();
+  String? userName;
   String? password;
 
   @override
@@ -70,12 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     CustomTextFormField(
-                      labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email),
+                      labelText: 'User Name',
+                      prefixIcon: const Icon(Icons.person),
                       obscureText: false,
                       onSaved: (val) {
                         setState(() {
-                          email = val;
+                          userName = val;
                         });
                       },
                       validator: (val) {
@@ -114,21 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20))),
                   onPressed: () async {
-                    // if (_formKey.currentState!.validate()) {
-                    //   _formKey.currentState!.save();
-                    //   final username =
-                    //   await AuthServices.signIn(email!, password!);
-                    //   if (username != null && context.mounted) {
-                    //     Navigator.pushReplacement(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (context) => HomeScreen(
-                    //
-                    //         ),
-                    //       ),
-                    //     );
-                    //   }
-                    // }
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      authServices.signInUser(
+                        context: context,
+                        userName: userName,
+                        password: password,
+                      );
+                    }
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(16.0),
@@ -143,12 +137,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
-                     Navigator.pushReplacement(
-                       context,
+                    Navigator.pushReplacement(
+                      context,
                       MaterialPageRoute(
-                       builder: (context) => RegisterScreen(),
-                       ),
-                     );
+                        builder: (context) => RegisterScreen(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Don\'t have an account yet? Sign up',

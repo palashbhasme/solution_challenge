@@ -20,21 +20,19 @@ class CustomTextField extends StatelessWidget {
     return Container(
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: DecoratedBox(
-          decoration: BoxDecoration(
-
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.12),
-                blurRadius: 10.0,
-                spreadRadius: 1.0,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.12),
+              blurRadius: 10.0,
+              spreadRadius: 1.0,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
         child: TextFormField(
           controller: controller,
           decoration: InputDecoration(
-
             isDense: true,
             contentPadding: EdgeInsets.all(12),
             //changing the padding inside the text field

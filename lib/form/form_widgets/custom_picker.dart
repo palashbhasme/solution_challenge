@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
 
-import '../../common/global_variables.dart';
-class CustomPicker extends StatelessWidget {
-  const CustomPicker({super.key});
+
+import '../../common/global_variables.dart';class CustomPicker extends StatefulWidget {
+  const CustomPicker({Key? key}) : super(key: key);
+
+  @override
+  _CustomPickerState createState() => _CustomPickerState();
+}
+
+class _CustomPickerState extends State<CustomPicker> {
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
-      onTap: () {
-        // Open your date picker here
+      onTap: () async {
+        final DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2101),
+        );
+
+        if (pickedDate != null && pickedDate != _selectedDate) {
+          setState(() {
+            _selectedDate = pickedDate;
+          });
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12),
@@ -30,8 +47,9 @@ class CustomPicker extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                // Display the selected date here. Initialize with a default text if necessary.
-                'Select Date', // Assume selectedDate is a variable that holds the date
+                _selectedDate != null
+                    ? "${_selectedDate!.day.toString().padLeft(2, '0')}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.year}"
+                    : 'Select Date',
                 style: TextStyle(
                   // Adjust your text style
                 ),
@@ -39,7 +57,19 @@ class CustomPicker extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.calendar_today),
-              onPressed: () {
+              onPressed: () async {
+                final DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2101),
+                );
+
+                if (pickedDate != null && pickedDate != _selectedDate) {
+                  setState(() {
+                    _selectedDate = pickedDate;
+                  });
+                }
               },
             ),
           ],
