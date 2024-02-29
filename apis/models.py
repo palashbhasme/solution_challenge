@@ -20,7 +20,7 @@ class Profile(models.Model):
     dob = models.DateField(blank=True, null=True)
     email = models.CharField(max_length = 20)
     phone = models.CharField(max_length = 15,blank=True, null=True)
-    gender = models.CharField(max_length = 1, choices = GENDER_CHOICES)
+    gender = models.CharField(max_length = 1, choices = GENDER_CHOICES, default = "O")
     is_volunteer = models.BooleanField(default = False)
 
     def __str__(self) -> str:

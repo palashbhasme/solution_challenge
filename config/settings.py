@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+import firebase_admin
 from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,10 +44,15 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     'rest_framework_simplejwt',
+    "firebase_admin",
     #apps
     "apis",
 ]
 CORS_ORIGIN_ALLOW_ALL = True
+
+cred = firebase_admin.credentials.Certificate("/Users/ekanshthakur/Desktop/SChallenge/creddd.json")
+firebase_admin.initialize_app(cred)
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -55,7 +61,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
-    ]
+    ],
 }
 
 MIDDLEWARE = [

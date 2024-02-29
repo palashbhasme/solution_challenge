@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -204,6 +205,7 @@ class MedicalRecordAPIView(APIView):
             return Response(serializer.data ,  status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
 
+
     def get(self, request, record_id):
         try:
             queryset = MedicalRecord.objects.get(pk = record_id)
@@ -310,3 +312,56 @@ class MedicationAPIView(APIView):
         
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+from firebase_admin import auth, credentials
+
+# ... Firebase Admin SDK setup
+
+class FirebaseAuthenticationView(APIView):
+    #permission_classes = [IsAuthenticated]  # Not needed for this endpoint
+
+    def post(self, request):
+        firebase_id_token = request.data.get('firebase_id_token')
+        sign_up = request.data.get('sign_up', False)
+
+        if not firebase_id_token:
+            return Response({'error': 'Missing firebase_id_token'}, status=400)
+
+        try:
+            decoded_token = auth.verify_id_token(firebase_id_token)
+            uid = decoded_token['uid']
+
+            try:
+                user = User.objects.get(pk=uid)
+            except User.DoesNotExist:
+                if sign_up:
+                    # Extract fields for Profile creation
+                    name = decoded_token.get('name', '')
+                    email = decoded_token.get('email', '')
+                    gender = decoded_token.get('gender', 'O')  # Check for appropriate format
+
+                    user = User.objects.create(
+                        username=uid,
+                        # Add other fields if needed, e.g., email
+                    )
+
+                    # Create Profile
+                    Profile.objects.create(
+                        user=user,
+                        name=name,
+                        email=email,
+                        gender=gender,
+                        # Add other fields as needed
+                    )
+                else:
+                    return Response({'error': 'User not found'}, status=401)
+
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+            })
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=401)
+
