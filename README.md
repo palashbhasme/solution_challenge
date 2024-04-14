@@ -1,4 +1,4 @@
-# Nutritrack - Google Solution Challenge 2024
+# Nutritrack - Google Solution Challenge 2024  <a href="https://youtu.be/n6AL6msS5AA?si=0ZNT_0UbFinW1hVi" target="_blank">Link</a>
 This README provides an overview of Nutritrack, an application developed for the Google Solution Challenge 2024. Nutritrack utilizes Gemini and the Google Maps platform to offer map functionality and an AI chatbot feature called Nutri.AI.
 
 ## Getting Started
